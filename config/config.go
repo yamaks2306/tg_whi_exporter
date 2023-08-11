@@ -6,14 +6,14 @@ import (
 	"os"
 )
 
-type WHIConfig struct {
+type configWHI struct {
 	TelegramToken string
 	ServerURL     string
 	MisType       string
 }
 
-func New() *WHIConfig {
-	return &WHIConfig{
+func New() *configWHI {
+	return &configWHI{
 		TelegramToken: getEnv("TELEGRAM_TOKEN"),
 		ServerURL:     getEnv("SERVER_URL"),
 		MisType:       getEnv("MIS_TYPE"),
