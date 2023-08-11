@@ -1,4 +1,4 @@
-package main
+package collector
 
 import (
 	"encoding/json"
@@ -6,10 +6,10 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/yamaks2306/tg_whi_exporter/config"
 )
 
 type tgInfoCollector struct {
@@ -17,7 +17,7 @@ type tgInfoCollector struct {
 	request_duration *prometheus.Desc
 }
 
-func newTgInfoCollector() *tgInfoCollector {
+func NewTgInfoCollector() *tgInfoCollector {
 	return &tgInfoCollector{
 		pending_updates: prometheus.NewDesc(
 			"pending_telegram_webhook_updates_count",
@@ -39,33 +39,14 @@ func (collector *tgInfoCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (collector *tgInfoCollector) Collect(ch chan<- prometheus.Metric) {
 
-	telegram_token, exits := os.LookupEnv("TELEGRAM_TOKEN")
-
-	if !exits || telegram_token == "" {
-		log.Println("Environment variable TELEGRAM_TOKEN does not exist or empty")
-		os.Exit(1)
-	}
-
-	server_url, exists := os.LookupEnv("SERVER_URL")
-
-	if !exists || server_url == "" {
-		log.Println("Environment variable SERVER_URL does not exist or empty")
-		os.Exit(1)
-	}
-
-	mis_type, exists := os.LookupEnv("MIS_TYPE")
-
-	if !exists || mis_type == "" {
-		log.Println("Environment variable MIS_TYPE does not exist or empty")
-		os.Exit(1)
-	}
+	conf := config.New()
 
 	start := time.Now()
-	webhookinfo := get_webhook_info(telegram_token).Result.Pending_update_count
+	webhookinfo := get_webhook_info(conf.TelegramToken).Result.Pending_update_count
 	duration := time.Since(start).Seconds()
 
-	ch <- prometheus.MustNewConstMetric(collector.pending_updates, prometheus.GaugeValue, float64(webhookinfo), server_url, mis_type)
-	ch <- prometheus.MustNewConstMetric(collector.request_duration, prometheus.GaugeValue, duration, server_url, mis_type)
+	ch <- prometheus.MustNewConstMetric(collector.pending_updates, prometheus.GaugeValue, float64(webhookinfo), conf.ServerURL, conf.MisType)
+	ch <- prometheus.MustNewConstMetric(collector.request_duration, prometheus.GaugeValue, duration, conf.ServerURL, conf.MisType)
 
 }
 
@@ -83,7 +64,6 @@ func get_webhook_info(token string) TgWebhookInfo {
 	if err != nil {
 		log.Println("No response from request")
 	}
-	log.Println(string(body))
 
 	var result TgWebhookInfo
 	if err := json.Unmarshal(body, &result); err != nil {

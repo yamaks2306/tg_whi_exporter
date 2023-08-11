@@ -13,8 +13,8 @@ vet: fmt
 .PHONY:vet
 
 build: vet
-		GOARCH=arm64 GOOS=darwin go build -o bin/${BINARY_NAME}-darwin-arm64 main.go collector.go
-		GOARCH=amd64 GOOS=linux go build -o bin/${BINARY_NAME}-linux-amd64 main.go collector.go
+		GOARCH=arm64 GOOS=darwin go build -o bin/${BINARY_NAME}-darwin-arm64 main.go
+		GOARCH=amd64 GOOS=linux go build -o bin/${BINARY_NAME}-linux-amd64 main.go
 .PHONY:build
 
 clean:

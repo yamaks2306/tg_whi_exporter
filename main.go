@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/yamaks2306/tg_whi_exporter/collector"
 )
 
 func init() {
@@ -17,7 +18,7 @@ func init() {
 
 func main() {
 
-	collector := newTgInfoCollector()
+	collector := collector.NewTgInfoCollector()
 	registry := prometheus.NewRegistry()
 	registry.MustRegister(collector)
 
