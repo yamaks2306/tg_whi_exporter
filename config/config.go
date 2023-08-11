@@ -25,8 +25,7 @@ func getEnv(key string) string {
 
 	if !exits || value == "" {
 		error_string := fmt.Sprintf("Environment variable %s does not exist or empty", key)
-		log.Println(error_string)
-		os.Exit(1)
+		log.Fatal(error_string)
 	}
 
 	return value

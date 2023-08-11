@@ -12,7 +12,7 @@ import (
 
 func init() {
 	if err := godotenv.Load("env/env.prod"); err != nil {
-		log.Println("No env file found")
+		log.Fatal("No env file found")
 	}
 }
 
@@ -26,6 +26,6 @@ func main() {
 
 	http.Handle("/metrics", promHandler)
 	log.Println("Start metrics web service")
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":9900", nil)
 
 }
