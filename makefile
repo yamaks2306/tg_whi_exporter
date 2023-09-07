@@ -1,5 +1,4 @@
 BINARY_NAME=tg_whi_exporter
-EXPORTER_VERSION = ${EXPORTER_VERSION}
 
 fmt:
 		go fmt 
