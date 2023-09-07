@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 
 jobs:
 
@@ -27,5 +29,11 @@ jobs:
 
       - name: Build
         run: make build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tg_whi_exporter
+          path: bin/
 
       
