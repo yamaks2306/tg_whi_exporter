@@ -9,13 +9,9 @@ import (
 const (
 	pg_container = "postgres"
 	pg_network   = "bridge"
-	pg_database  = "loyalmed"
-	pg_user      = "loyalmed"
-	pg_pass      = "1q2w3e"
-	pg_port      = "5432"
 )
 
-type ConfigWHI struct {
+type Config struct {
 	TgConfig       ConfigTg
 	PgDockerConfig ConfigPgDocker
 	PgConfig       ConfigPg
@@ -39,8 +35,8 @@ type ConfigPg struct {
 	DbPort     string
 }
 
-func New() *ConfigWHI {
-	return &ConfigWHI{
+func New() *Config {
+	return &Config{
 		TgConfig: ConfigTg{
 			TelegramToken: getEnv("TELEGRAM_TOKEN"),
 			ServerURL:     getEnv("SERVER_URL"),
@@ -51,10 +47,10 @@ func New() *ConfigWHI {
 			PgContainerNetwork: getEnvOrDefault("PG_CONTAINER_NETWORK", pg_network),
 		},
 		PgConfig: ConfigPg{
-			DbName:     getEnvOrDefault("PG_DB_NAME", pg_database),
-			DbUser:     getEnvOrDefault("PG_USER", pg_user),
-			DbPassword: getEnvOrDefault("PG_PASSWORD", pg_pass),
-			DbPort:     getEnvOrDefault("PG_PORT", pg_port),
+			DbName:     getEnv("POSTGRES_DB"),
+			DbUser:     getEnv("POSTGRES_USER"),
+			DbPassword: getEnv("POSTGRES_PASSWORD"),
+			DbPort:     getEnv("POSTGRES_PORT"),
 		},
 	}
 }

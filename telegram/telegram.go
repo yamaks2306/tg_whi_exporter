@@ -1,10 +1,10 @@
 package telegram
 
 import (
-	"fmt"
-	"log"
-	"io"
 	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 )
 
@@ -19,15 +19,13 @@ type TgWebhookInfo struct {
 	} `json:"result"`
 }
 
-func GetWebhookInfo(token string) TgWebhookInfo {
+func GetWebhookInfo(token string) (*TgWebhookInfo, error) {
 	url := fmt.Sprintf("https://api.telegram.org/bot%s/getWebhookInfo", token)
 	response, err := http.Get(url)
 	if err != nil {
-		log.Println(err)
+		return nil, err
 	}
 	defer response.Body.Close()
-
-	log.Println(response.StatusCode)
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
@@ -39,5 +37,5 @@ func GetWebhookInfo(token string) TgWebhookInfo {
 		log.Println("Can not unmarshal JSON")
 	}
 
-	return result
+	return &result, nil
 }

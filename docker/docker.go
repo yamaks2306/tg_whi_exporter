@@ -2,35 +2,40 @@ package docker
 
 import (
 	"context"
-	"fmt"
-
+	"errors"
 	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/yamaks2306/tg_whi_exporter/util"
 )
 
-func GetPgContainerIP(containerName, networkName string) string {
+func GetPgContainerIP(containerName, networkName string) (string, error) {
 	cli, err := client.NewClientWithOpts(client.FromEnv)
-	util.CheckError(err)
+	if err != nil {
+		return "", err
+	}
 
 	ctx := context.Background()
 
-	var postgres types.Container
+	var postgres *types.Container
 
 	containers, err := cli.ContainerList(ctx, types.ContainerListOptions{})
-	util.CheckError(err)
+	if err != nil {
+		return "", err
+	}
 
 	for _, container := range containers {
 		if strings.Contains(container.Names[0], containerName) {
-			postgres = container
+			postgres = &container
 		}
 	}
 
-	nw := postgres.NetworkSettings.Networks
-	fmt.Println(nw[networkName].IPAddress)
+	if postgres == nil {
+		return "", errors.New("container postgres not found")
+	}
 
-	return nw[networkName].IPAddress
+	nw := postgres.NetworkSettings.Networks
+
+	return nw[networkName].IPAddress, nil
 
 }
