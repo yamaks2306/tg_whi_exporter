@@ -34,11 +34,11 @@ func GetPgContainerIP(containerName, networkName string) (string, error) {
 		return "", errors.New("container postgres not found")
 	}
 
-	nw := postgres.NetworkSettings.Networks[networkName]
-	if nw == nil {
+	docker_netweork := postgres.NetworkSettings.Networks[networkName]
+	if docker_netweork == nil {
 		return "", errors.New("docker network not found")
 	}
 
-	return nw.IPAddress, nil
+	return docker_netweork.IPAddress, nil
 
 }
