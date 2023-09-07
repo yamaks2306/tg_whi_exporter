@@ -30,11 +30,13 @@ func GetWebhookInfo(token string) (*TgWebhookInfo, error) {
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Println("No response from request")
+		return nil, err
 	}
 
 	var result TgWebhookInfo
 	if err := json.Unmarshal(body, &result); err != nil {
 		log.Println("Can not unmarshal JSON")
+		return nil, err
 	}
 
 	return &result, nil
