@@ -4,6 +4,11 @@ fmt:
 		go fmt 
 .PHONY:fmt
 
+init:
+	    go mod tidy
+		go get golang.org/x/lint/golint
+.PHONY:init
+
 lint: fmt
 		golint 
 .PHONY:lint
