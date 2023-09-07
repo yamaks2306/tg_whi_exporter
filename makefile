@@ -1,4 +1,5 @@
 BINARY_NAME=tg_whi_exporter
+EXPORTER_VERSION = ${EXPORTER_VERSION}
 
 fmt:
 		go fmt 
@@ -18,12 +19,11 @@ vet: fmt
 .PHONY:vet
 
 build: vet
-		GOARCH=arm64 GOOS=darwin go build -o bin/${BINARY_NAME}-darwin-arm64 main.go
-		GOARCH=amd64 GOOS=linux go build -o bin/${BINARY_NAME}-linux-amd64 main.go
+		GOARCH=arm64 GOOS=darwin go build -o bin/${BINARY_NAME}-${EXPORTER_VERSION}-darwin-arm64 main.go
+		GOARCH=amd64 GOOS=linux go build -o bin/${BINARY_NAME}-${EXPORTER_VERSION}-linux-amd64 main.go
 .PHONY:build
 
 clean:
 		go clean
-		rm bin/${BINARY_NAME}-darwin-arm64
-		rm bin/${BINARY_NAME}-linux-amd64
+		rm -rf bin/
 .PHONY:clean

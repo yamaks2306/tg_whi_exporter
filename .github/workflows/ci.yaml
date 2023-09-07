@@ -22,4 +22,10 @@ jobs:
       - name: Init project
         run: make init
 
+      - name: Get version
+        run: echo "EXPORTER_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - name: Build
+        run: make build
+
       
