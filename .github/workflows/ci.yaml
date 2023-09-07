@@ -1,8 +1,6 @@
 name: Build Loyalmed prometheuys exporter
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
 
@@ -30,10 +28,9 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Create release
+        uses: ncipollo/release-action@v1
         with:
-          name: tg_whi_exporter
-          path: bin/
+          artifacts: "bin/*"
 
       
